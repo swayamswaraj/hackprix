@@ -1,23 +1,35 @@
-// app/interpreter/page.tsx
 'use client';
 
-import { useState } from "react";
+import React, { useRef, useState } from "react";
+import Webcam from "react-webcam";
+import Spline from '@splinetool/react-spline';
 
 export default function InterpreterPage() {
-  const [image, setImage] = useState<File | null>(null);
+  const webcamRef = useRef<Webcam>(null);
   const [prediction, setPrediction] = useState<string | null>(null);
+  const [constructedText, setConstructedText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleUpload = async () => {
-    if (!image) return;
+  const captureAndPredict = async () => {
+    if (!webcamRef.current) return;
 
     setLoading(true);
     setError(null);
     setPrediction(null);
 
+    const imageSrc = webcamRef.current.getScreenshot();
+    if (!imageSrc) {
+      setError("Unable to capture image");
+      setLoading(false);
+      return;
+    }
+
+    const blob = await (await fetch(imageSrc)).blob();
+    const file = new File([blob], "snapshot.jpg", { type: "image/jpeg" });
+
     const formData = new FormData();
-    formData.append("file", image);
+    formData.append("file", file);
 
     try {
       const res = await fetch("http://127.0.0.1:8000/predict", {
@@ -39,34 +51,87 @@ export default function InterpreterPage() {
     }
   };
 
+  const handleAdd = () => {
+    if (prediction) {
+      setConstructedText((prev) => prev + prediction);
+      setPrediction(null);
+    }
+  };
+
+  const handleRetake = () => {
+    setPrediction(null);
+    setError(null);
+  };
+
+  const handleRefresh = () => {
+    setConstructedText("");
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black px-4 py-8 text-white">
-      <h1 className="text-3xl md:text-5xl font-semibold mb-6">ISL Interpreter</h1>
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          if (e.target.files?.[0]) setImage(e.target.files[0]);
-        }}
-        className="mb-4 text-white"
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Spline Background */}
+      <div className="absolute inset-0 -z-10">
+        <Spline
+        scene="https://prod.spline.design/AkVomxSTOLXjvBOh/scene.splinecode" 
       />
+      </div>
 
-      <button
-        onClick={handleUpload}
-        disabled={!image || loading}
-        className="bg-blue-500 px-6 py-3 rounded-lg text-white hover:bg-blue-600 disabled:opacity-50"
-      >
-        {loading ? "Predicting..." : "Upload & Predict"}
-      </button>
+      {/* Main Content */}
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 text-white space-y-6">
+        <h1 className="text-3xl md:text-5xl font-semibold text-center">ISL Interpreter</h1>
 
-      {prediction && (
-        <p className="mt-6 text-xl">
-          🔤 Predicted Letter: <span className="font-bold">{prediction}</span>
-        </p>
-      )}
+        <Webcam
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={{ facingMode: "user" }}
+          className="rounded-lg border-4 border-white w-full max-w-md shadow-xl"
+        />
 
-      {error && <p className="mt-4 text-red-400">⚠️ {error}</p>}
+        <button
+          onClick={captureAndPredict}
+          disabled={loading}
+          className="transition-all bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 px-6 py-3 rounded-xl text-white shadow-lg disabled:opacity-50"
+        >
+          {loading ? "Predicting..." : "📸 Capture & Predict"}
+        </button>
+
+        {prediction && (
+          <div className="text-xl text-white flex flex-col items-center space-y-4">
+            <p>
+              🔤 Predicted Letter: <span className="font-bold text-blue-200">{prediction}</span>
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={handleAdd}
+                className="transition-all bg-gradient-to-br from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white px-5 py-2 rounded-xl shadow-lg hover:scale-105"
+              >
+                ✅ Add
+              </button>
+              <button
+                onClick={handleRetake}
+                className="transition-all bg-gradient-to-br from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white px-5 py-2 rounded-xl shadow-lg hover:scale-105"
+              >
+                🔁 Retake
+              </button>
+            </div>
+          </div>
+        )}
+
+        {error && <p className="text-red-400 font-medium text-lg">⚠️ {error}</p>}
+
+        {/* Constructed Sentence */}
+        <div className="mt-6 text-center flex flex-col items-center space-y-3">
+          <div className="bg-white/90 text-black px-4 py-3 rounded-xl min-w-[300px] min-h-[60px] text-lg shadow-inner backdrop-blur">
+            {constructedText || "...."}
+          </div>
+          <button
+            onClick={handleRefresh}
+            className="transition-all bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-4 py-2 rounded-xl shadow-lg hover:scale-105"
+          >
+            🗑️ Clear Sentence
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

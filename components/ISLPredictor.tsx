@@ -1,3 +1,6 @@
+
+import Spline from '@splinetool/react-spline';
+
 "use client";
 import { useState } from "react";
 
