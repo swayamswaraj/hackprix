@@ -1,5 +1,3 @@
-// File: /components/ISLPredictor.tsx
-
 "use client";
 import { useState } from "react";
 

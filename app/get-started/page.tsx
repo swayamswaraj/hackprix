@@ -49,7 +49,7 @@ export default function Home() {
               <p className="text-white/80 text-sm">Practice Indian Sign Language from A–Z with feedback.</p>
             </div>
             
-            <Link href='/learn' className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center px-6 py-4 rounded-xl transition">
+            <Link href='/text-isl' className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center px-6 py-4 rounded-xl transition">
               Start Learning
             </Link>
           </div>
