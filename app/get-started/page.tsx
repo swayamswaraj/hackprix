@@ -25,7 +25,7 @@ export default function Home() {
           <div className="relative z-10 h-full flex flex-col justify-between p-6">
             <div>
               <h2 className="text-white text-xl font-semibold mb-2">Interpreter</h2>
-              <p className="text-white/80 text-sm">Convert ISL gestures to text and audio in real-time.</p>
+              <p className="text-white/80 text-sm">Convert ISL gestures to text in real-time.</p>
             </div>
             <Link href='/interpreter' className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center px-6 py-4 rounded-xl transition">
               Try Now
@@ -45,12 +45,12 @@ export default function Home() {
           {/* Card content */}
           <div className="relative z-10 h-full flex flex-col justify-between p-6">
             <div>
-              <h2 className="text-white text-xl font-semibold mb-2">Learn Signs</h2>
-              <p className="text-white/80 text-sm">Practice Indian Sign Language from A–Z with feedback.</p>
+              <h2 className="text-white text-xl font-semibold mb-2">Text To Sign</h2>
+              <p className="text-white/80 text-sm">Convert text into Indian Sign language</p>
             </div>
             
             <Link href='/learn' className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center px-6 py-4 rounded-xl transition">
-              Start Learning
+              Try Now
             </Link>
           </div>
         </div>
