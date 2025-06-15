@@ -1,4 +1,4 @@
-// File: /components/ISLPredictor.tsx
+
 import Spline from '@splinetool/react-spline';
 
 "use client";
