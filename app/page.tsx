@@ -19,7 +19,7 @@ export default function Home() {
       {/* Overlay Text & Button */}
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center space-y-6 text-center pointer-events-none">
         <h2 className="text-white text-3xl md:text-5xl max-w-3xl px-4 font-semibold">
-          We’re the <span className="text-blue-400">Google Translate</span> for Indian Sign Language — so no voice ever goes unheard.
+          We’re the <span className="text-blue-400">Google Translate</span> for International Sign Language — so no voice ever goes unheard.
         </h2>
 
         <Link

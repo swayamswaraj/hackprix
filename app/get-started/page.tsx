@@ -46,10 +46,10 @@ export default function Home() {
           <div className="relative z-10 h-full flex flex-col justify-between p-6">
             <div>
               <h2 className="text-white text-xl font-semibold mb-2">Text To Sign</h2>
-              <p className="text-white/80 text-sm">Convert text into Indian Sign language</p>
+              <p className="text-white/80 text-sm">Convert text into International Sign language</p>
             </div>
             
-            <Link href='/learn' className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center px-6 py-4 rounded-xl transition">
+            <Link href='/text-isl' className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-center px-6 py-4 rounded-xl transition">
               Try Now
             </Link>
           </div>
